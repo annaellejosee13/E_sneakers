@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneakers- Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-slate-800 text-white flex flex-col">
+            <!-- Profile Section -->
+            <div class="p-6 border-b border-slate-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                        <img src="assets/images/logo-shoes.svg" alt="Logo" class="w-8 h-8 object-contain" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Sneakers-Admin</h3>
+                    </div>
+                </div>
+                <!-- <button class="w-full mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors">
+                    Upgrade
+                </button> -->
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="./dashboardadmin.html" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-th-large w-5"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./transactionadmin.html" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors  bg-blue-600 p-3 rounded-lg">
+                            <i class="fas fa-exchange-alt w-5"></i>
+                            <span>Transactions</span>
+                            <span class="ml-auto bg-blue-600 text-xs px-2 py-1 rounded-full">#</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors ">
+                            <i class="fas fa-shopping-cart w-5"></i>
+                            <span>Ventes</span>
+                            <span class="ml-auto bg-blue-600 text-xs px-2 py-1 rounded-full">8</span>
+                        </a>
+                    </li>
+                    <li>
+                        <!-- <a href="#" class="flex items-center space-x-3 text-white bg-blue-600 p-3 rounded-lg"> -->
+                            <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors ">
+                            <i class="fas fa-box w-5"></i>
+                            <span>Produits</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-warehouse w-5"></i>
+                            <span>Stock</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-cog w-5"></i>
+                            <span>Paramètres</span>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-users w-5"></i>
+                            <span>Admin/RH</span>
+                        </a>
+                    </li> -->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-xl font-semibold text-gray-900">Dashboard</h1>
+                        <!-- <div class="flex items-center space-x-2 text-sm text-gray-500">
+                            <span>08/21/2022</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div> -->
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button class="p-2 text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <!-- <button class="p-2 text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-cog"></i>
+                        </button> -->
+                        <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="flex-1 p-6 overflow-auto">
+                
+                <div class="container">
+                    <!-- <div class="header">
+                        <h1>Transactions</h1>
+                        <a href="#" class="back-btn" onclick="goBack()">← Retour au Dashboard</a>
+                    </div> -->
+            
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalSales">€12,450</div>
+                            <div class="stat-label">Ventes Totales</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalTransactions">127</div>
+                            <div class="stat-label">Transactions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avgOrder">€98</div>
+                            <div class="stat-label">Panier Moyen</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="pendingCount">8</div>
+                            <div class="stat-label">En Attente</div>
+                        </div>
+                    </div>
+            
+                    <div class="transaction-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Historique des Transactions</h2>
+                            <div class="filter-tabs">
+                                <button class="filter-tab active" onclick="filterTransactions('all')">Toutes</button>
+                                <button class="filter-tab" onclick="filterTransactions('completed')">Complétées</button>
+                                <button class="filter-tab" onclick="filterTransactions('pending')">En Attente</button>
+                                <button class="filter-tab" onclick="filterTransactions('cancelled')">Annulées</button>
+                            </div>
+                        </div>
+            
+                        <div class="transaction-list" id="transactionList">
+                            <!-- Les transactions seront générées par JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            
+                <button class="add-transaction-btn" onclick="openModal()">+</button>
+            
+                <div class="modal" id="transactionModal">
+                    <div class="modal-content">
+                        <h3 style="margin-bottom: 24px; color: white;">Nouvelle Transaction</h3>
+                        <form id="transactionForm">
+                            <div class="form-group">
+                                <label>Modèle de Sneaker</label>
+                                <select id="sneakerModel" required>
+                                    <option value="">Sélectionner un modèle</option>
+                                    <option value="Air Jordan 1">Air Jordan 1 Retro</option>
+                                    <option value="Nike Dunk">Nike Dunk Low</option>
+                                    <option value="Adidas Yeezy">Adidas Yeezy Boost 350</option>
+                                    <option value="Travis Scott">Travis Scott x Nike</option>
+                                    <option value="Off-White">Off-White x Nike</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Prix (€)</label>
+                                <input type="number" id="price" required min="0" step="0.01" placeholder="150.00">
+                            </div>
+                            <div class="form-group">
+                                <label>Client</label>
+                                <input type="text" id="client" required placeholder="Nom du client">
+                            </div>
+                            <div class="form-group">
+                                <label>Statut</label>
+                                <select id="status" required>
+                                    <option value="completed">Complétée</option>
+                                    <option value="pending">En Attente</option>
+                                    <option value="cancelled">Annulée</option>
+                                </select>
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Ajouter Transaction</button>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                <!--  -->
+
+
+
+
+                <!-- Top Products Table -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-gray-900">Tops produits</h3>
+                            <!-- <button class="flex items-center space-x-1 text-sm text-gray-500 hover:text-gray-700">
+                                <span>Export</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button> -->
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produits</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantités</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pocket Drone 2.4G</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">07 April 2022</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$4,678.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pocket Drone 2.4G</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">07 April 2022</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$4,678.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pocket Drone 2.4G</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">07 April 2022</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$6,678.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pocket Drone 2.4G</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">07 April 2022</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$129</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$4,678.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    <style>
+        /* * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        } */
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F0F0F0 0%, #1a1a2e 100%);
+            /* background: red; */
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            /* background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1); */
+            /* background: black ; */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #F0F0F0;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #1a1a2e;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            /* background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1); */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            /* font-weight: 700; */
+            margin-bottom: 8px;
+            /* background: linear-gradient(135deg, #ff6b6b, #4ecdc4); */
+            background: black;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: black;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .transaction-section {
+            background: #F0F0F0;
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid #1a1a2e;
+            backdrop-filter: blur(20px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: black;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            background: #F0F0F0;
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid #1a1a2e;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: black;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #31326F, #4ecdc4);
+            color: black;
+            transform: translateY(-1px);
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .transaction-item {
+            background: #F0F0F0;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #1a1a2e;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .transaction-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #31326F, #4ecdc4);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .transaction-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .transaction-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(8px);
+            box-shadow: 0 12px 30px #1a1a2e;
+        }
+
+        .transaction-content {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sneaker-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .transaction-details h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: black;
+        }
+
+        .transaction-meta {
+            display: flex;
+            gap: 16px;
+            color: black;
+            font-size: 0.85rem;
+        }
+
+        .transaction-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1D1616, #1D1616);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .transaction-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-completed {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+            border: 1px solid rgba(72, 187, 120, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(237, 137, 54, 0.2);
+            color: #ed8936;
+            border: 1px solid rgba(237, 137, 54, 0.3);
+        }
+
+        .status-cancelled {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+            border: 1px solid rgba(245, 101, 101, 0.3);
+        }
+
+        .add-transaction-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #31326F, #4ecdc4);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            /* box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4); */
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .add-transaction-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .transaction-item {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .transaction-item:nth-child(2) { animation-delay: 0.1s; }
+        .transaction-item:nth-child(3) { animation-delay: 0.2s; }
+        .transaction-item:nth-child(4) { animation-delay: 0.3s; }
+        .transaction-item:nth-child(5) { animation-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+            .transaction-content {
+                grid-template-columns: auto 1fr;
+                gap: 12px;
+            }
+            
+            .transaction-amount, .transaction-status {
+                grid-column: 1 / -1;
+                margin-top: 8px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+
+    <script>
+        // Initialize the trend chart
+        // const ctx = document.getElementById('trendChart').getContext('2d');
+        // new Chart(ctx, {
+        //     type: 'line',
+        //     data: {
+        //         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        //         datasets: [{
+        //             data: [300, 450, 320, 500, 400, 600, 550],
+        //             borderColor: '#ec4899',
+        //             backgroundColor: 'rgba(236, 72, 153, 0.1)',
+        //             borderWidth: 3,
+        //             fill: true,
+        //             tension: 0.4,
+        //             pointRadius: 0,
+        //             pointHoverRadius: 6
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         plugins: {
+        //             legend: {
+        //                 display: false
+        //             }
+        //         },
+        //         scales: {
+        //             x: {
+        //                 display: false
+        //             },
+        //             y: {
+        //                 display: false
+        //             }
+        //         },
+        //         elements: {
+        //             point: {
+        //                 radius: 0
+        //             }
+        //         }
+        //     }
+        // });
+
+
+
+        let transactions = [
+            {
+                id: 1,
+                sneaker: 'Air Jordan 1 Retro',
+                price: 180,
+                client: 'Pierre Martin',
+                status: 'completed',
+                date: '2024-11-15',
+                image: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=150&h=150&fit=crop&crop=center'
+            },
+            {
+                id: 2,
+                sneaker: 'Nike Dunk Low',
+                price: 120,
+                client: 'Sophie Dubois',
+                status: 'pending',
+                date: '2024-11-14',
+                image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=150&h=150&fit=crop&crop=center'
+            },
+            {
+                id: 3,
+                sneaker: 'Adidas Yeezy Boost 350',
+                price: 250,
+                client: 'Lucas Bernard',
+                status: 'completed',
+                date: '2024-11-13',
+                image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5c?w=150&h=150&fit=crop&crop=center'
+            },
+            {
+                id: 4,
+                sneaker: 'Travis Scott x Nike',
+                price: 450,
+                client: 'Emma Moreau',
+                status: 'cancelled',
+                date: '2024-11-12',
+                image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=150&h=150&fit=crop&crop=center'
+            },
+            {
+                id: 5,
+                sneaker: 'Off-White x Nike',
+                price: 380,
+                client: 'Tom Wilson',
+                status: 'completed',
+                date: '2024-11-11',
+                image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=150&h=150&fit=crop&crop=center'
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderTransactions() {
+            const list = document.getElementById('transactionList');
+            const filteredTransactions = currentFilter === 'all' 
+                ? transactions 
+                : transactions.filter(t => t.status === currentFilter);
+
+            list.innerHTML = filteredTransactions.map(transaction => `
+                <div class="transaction-item" data-status="${transaction.status}">
+                    <div class="transaction-content">
+                        <img src="${transaction.image}" alt="${transaction.sneaker}" class="sneaker-image">
+                        <div class="transaction-details">
+                            <h4>${transaction.sneaker}</h4>
+                            <div class="transaction-meta">
+                                <span>Client: ${transaction.client}</span>
+                                <span>Date: ${new Date(transaction.date).toLocaleDateString('fr-FR')}</span>
+                            </div>
+                        </div>
+                        <div class="transaction-amount">€${transaction.price}</div>
+                        <div class="transaction-status status-${transaction.status}">
+                            ${getStatusText(transaction.status)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            updateStats();
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'completed': 'Complétée',
+                'pending': 'En Attente',
+                'cancelled': 'Annulée'
+            };
+            return statusMap[status] || status;
+        }
+
+        function filterTransactions(filter) {
+            currentFilter = filter;
+            
+            // Mise à jour des onglets
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderTransactions();
+        }
+
+        function updateStats() {
+            const completedTransactions = transactions.filter(t => t.status === 'completed');
+            const totalSales = completedTransactions.reduce((sum, t) => sum + t.price, 0);
+            const avgOrder = completedTransactions.length > 0 ? totalSales / completedTransactions.length : 0;
+            const pendingCount = transactions.filter(t => t.status === 'pending').length;
+
+            document.getElementById('totalSales').textContent = `€${totalSales.toLocaleString()}`;
+            document.getElementById('totalTransactions').textContent = transactions.length;
+            document.getElementById('avgOrder').textContent = `€${Math.round(avgOrder)}`;
+            document.getElementById('pendingCount').textContent = pendingCount;
+        }
+
+        function openModal() {
+            document.getElementById('transactionModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('transactionModal').classList.remove('show');
+            document.getElementById('transactionForm').reset();
+        }
+
+        function goBack() {
+            // Simulation du retour au dashboard
+            alert('Retour au dashboard (vous pouvez remplacer ceci par window.history.back() ou une redirection)');
+        }
+
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const newTransaction = {
+                id: transactions.length + 1,
+                sneaker: document.getElementById('sneakerModel').value,
+                price: parseFloat(document.getElementById('price').value),
+                client: document.getElementById('client').value,
+                status: document.getElementById('status').value,
+                date: new Date().toISOString().split('T')[0],
+                image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=150&h=150&fit=crop&crop=center'
+            };
+            
+            transactions.unshift(newTransaction);
+            renderTransactions();
+            closeModal();
+            
+            // Animation de confirmation
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 3000;
+                transform: translateX(300px);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = 'Transaction ajoutée avec succès !';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+                notification.style.transform = 'translateX(300px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        });
+
+        // Fermer la modal en cliquant à l'extérieur
+        document.getElementById('transactionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialisation
+        renderTransactions();
+    </script>
+</body>
+</html>
