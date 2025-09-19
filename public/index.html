@@ -97,12 +97,17 @@
           </li>
 
           <li>
-            <a href="./login.html" class="nav-action-btn">
-              <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
-
-              <span class="nav-action-text">Se connecter / S'inscrire</span>
-            </a>
-          </li>
+            <details class="dropdown">
+              <summary class="nav-action-btn" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+                <span class="nav-action-text">Se connecter / S'inscrire</span>
+              </summary>
+              <ul class="dropdown-menu" style="background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-top: 8px; padding: 8px 0; min-width: 180px;">
+                <li><a href="./moncompte.html" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Mon compte</a></li>
+                <li><a href="#" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Mes commandes</a></li>
+                <li><a href="./deconnectionglobal.html" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Déconnexion</a></li>
+              </ul>
+            </details>
 
           <li>
             <button class="nav-action-btn">
