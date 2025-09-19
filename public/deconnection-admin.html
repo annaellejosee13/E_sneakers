@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        }
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logout-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.6s ease;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .logout-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logout-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logout-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 16px;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-email {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .session-info {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-options {
+            margin-bottom: 32px;
+        }
+
+        .option-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .option-info {
+            text-align: left;
+        }
+
+        .option-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transition: 0.4s;
+            border-radius: 26px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #48bb78, #4ecdc4);
+            border-color: transparent;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .logout-actions {
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #f56565, #ff6b6b);
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #e53e3e, #f56565);
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .countdown {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 16px;
+            display: none;
+        }
+
+        .countdown.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar.active {
+            display: block;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #f56565, #ff6b6b);
+            width: 0%;
+            transition: width 0.1s linear;
+            border-radius: 2px;
+        }
+
+        .logout-warning {
+            background: rgba(237, 137, 54, 0.1);
+            border: 1px solid rgba(237, 137, 54, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            color: #ed8936;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #ed8936;
+            margin-bottom: 4px;
+        }
+
+        .warning-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .security-info {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: left;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .security-item:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 600px) {
+            .logout-container {
+                padding: 24px;
+                margin: 20px;
+            }
+
+            .logout-title {
+                font-size: 1.7rem;
+            }
+
+            .logout-actions {
+                flex-direction: column;
+            }
+
+            .session-info {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+         
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 sidebar-gradient text-white flex flex-col">
+            <!-- User Profile -->
+            <div class="p-6 text-center border-b border-gray-700">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-400 to-green-400 rounded-full mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">SK</span>
+                </div>
+                <h3 class="font-semibold text-lg">SNEAKERS</h3>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="./dashboardadmin.html"  class="nav-link flex items-center p-3  text-white " data-page="dashboard">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./vendeurs-admin.html" onclick="showPage('dashboard')" class="nav-link flex items-center p-3  text-white " data-page="vendeurs">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                            </svg>
+                            Vendeurs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./produits-admin.html" class="nav-link flex items-center p-3  text-white " data-page="produits">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            </svg>
+                            Produits
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./parametre-admin.html"class="nav-link flex items-center p-3  text-white bg-blue-600 p-3 rounded-lg"  data-page="parametres">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                            </svg>
+                            Paramètres
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            onclick="window.location.href='deconnection-admin.html'">
+        Deconnexion
+    </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <h1 id="page-title" class="text-2xl font-bold text-gray-900">DASHBOARD ADMIN</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div id="search-bar" class="hidden">
+                            <div class="relative">
+                                <input type="text" placeholder="Recherche" class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <button class="p-2 text-gray-400 hover:text-gray-600 relative">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                            </svg>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">1</span>
+                        </button>
+                        <a href="deconnection-admin.html">
+                            <img src="assets/images/logo-shoes.svg" alt="Profil" class="w-8 h-8 rounded-full object-cover cursor-pointer" />
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <div class="container">
+
+                    <div class="logout-container">
+                        <div class="logout-icon">
+                            🚪
+                        </div>
+                
+                        <h1 class="logout-title">Déconnexion</h1>
+                        <p class="logout-subtitle">Vous êtes sur le point de quitter votre session administrateur</p>
+                
+                        <div class="user-info">
+                            <div class="user-avatar">JD</div>
+                            <div class="user-name">Jean Dupont</div>
+                            <div class="user-email">jean.dupont@sneakerstore.com</div>
+                            <div class="session-info">
+                                <span>Connecté depuis: 14:32</span>
+                                <span>IP: 192.168.1.100</span>
+                            </div>
+                        </div>
+                
+                        <div class="logout-warning">
+                            <span class="warning-icon">⚠️</span>
+                            <div class="warning-content">
+                                <div class="warning-title">Attention</div>
+                                <div class="warning-text">Toutes les données non sauvegardées seront perdues</div>
+                            </div>
+                        </div>
+                
+                        <div class="logout-options">
+                            <div class="option-item">
+                                <div class="option-info">
+                                    <div class="option-name">Fermer toutes les sessions</div>
+                                    <div class="option-desc">Se déconnecter de tous les appareils</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="logoutAllDevices">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                
+                            <div class="option-item">
+                                <div class="option-info">
+                                    <div class="option-name">Effacer les données locales</div>
+                                    <div class="option-desc">Supprimer les préférences du navigateur</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="clearLocalData">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                
+                        <div class="logout-actions">
+                            <button class="btn btn-logout" onclick="confirmLogout()">
+                                Se déconnecter maintenant
+                            </button>
+                            <button class="btn btn-cancel" onclick="cancelLogout()">
+                                Annuler et rester connecté
+                            </button>
+                        </div>
+                
+                        <div class="countdown" id="countdown">
+                            Déconnexion automatique dans <span id="countdownTimer">30</span> secondes
+                        </div>
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                
+                        <div class="security-info">
+                            <div class="security-item">
+                                <span>🔒</span>
+                                <span>Votre session sera sécurisée</span>
+                            </div>
+                            <div class="security-item">
+                                <span>📝</span>
+                                <span>Les activités seront enregistrées dans les logs</span>
+                            </div>
+                            <div class="security-item">
+                                <span>🛡️</span>
+                                <span>Connexion chiffrée SSL/TLS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                    
+            
+                    
+                   
+                  
+               
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let currentBrandFilter = 'all';
+        let currentView = 'grid';
+        let products = [];
+        let editingProductId = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeBrandsChart();
+            loadProducts();
+            setupEventListeners();
+        });
+
+        // Initialisation du graphique des marques
+        function initializeBrandsChart() {
+            const ctx = document.getElementById('brandsChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Nike', 'Adidas', 'Jordan', 'Puma', 'Vans', 'Autres'],
+                    datasets: [{
+                        data: [127, 89, 76, 45, 32, 87],
+                        backgroundColor: [
+                            '#ff6b6b',
+                            '#4ecdc4',
+                            '#45b7d1',
+                            '#96ceb4',
+                            '#feca57',
+                            '#a29bfe'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgba(255,255,255,0.8)',
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        // Configuration des événements
+        function setupEventListeners() {
+            // Événements de filtrage en temps réel
+            document.getElementById('minPrice').addEventListener('input', filterProducts);
+            document.getElementById('maxPrice').addEventListener('input', filterProducts);
+
+            // Formulaire de produit
+            document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
+
+            // Fermer le modal en cliquant à l'extérieur
+            document.getElementById('productModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeProductModal();
+                }
+            });
+        }
+
+        // Charger les produits (simulation)
+        function loadProducts() {
+            // Simulation de données - en réalité, cela viendrait d'une API
+            products = [
+                {id: 1, name: 'Air Max 270 React', brand: 'nike', price: 189, stock: 25, sizes: ['38','39','40','41','42']},
+                {id: 2, name: 'Ultraboost 22', brand: 'adidas', price: 159, stock: 42, sizes: ['39','40','41','42','43']},
+                {id: 3, name: 'Air Jordan 1 Retro High', brand: 'jordan', price: 220, stock: 8, sizes: ['40','41','42','43']},
+                {id: 4, name: 'RS-X3 Puzzle', brand: 'puma', price: 99, stock: 67, sizes: ['38','39','40','41','42','43']},
+                {id: 5, name: 'Old Skool Classic', brand: 'vans', price: 75, stock: 34, sizes: ['37','38','39','40','41','42']},
+                {id: 6, name: 'Chuck Taylor All Star', brand: 'converse', price: 65, stock: 0, sizes: ['38','39','40','41']},
+                {id: 7, name: '990v5 Made in USA', brand: 'newbalance', price: 145, stock: 19, sizes: ['40','41','42','43','44']},
+                {id: 8, name: 'Air Force 1 \'07', brand: 'nike', price: 179, stock: 52, sizes: ['38','39','40','41','42','43']}
+            ];
+            filterProducts();
+        }
+
+        // Filtrer par marque
+        function filterByBrand(brand) {
+            currentBrandFilter = brand;
+            
+            // Mettre à jour l'UI des filtres
+            document.querySelectorAll('.brand-filter').forEach(filter => {
+                filter.classList.remove('active');
+                if (filter.dataset.brand === brand) {
+                    filter.classList.add('active');
+                }
+            });
+
+            filterProducts();
+        }
+
+        // Filtrer les produits
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            const stockFilter = document.getElementById('stockFilter').value;
+
+            const gridProducts = document.querySelectorAll('#productsGrid .product-card');
+            const tableRows = document.querySelectorAll('#productsTable tbody tr');
+
+            function shouldShowProduct(element) {
+                const brand = element.dataset.brand;
+                const price = parseFloat(element.dataset.price);
+                const stock = parseInt(element.dataset.stock);
+                const productName = element.querySelector('.product-title, .table-product-info h4').textContent.toLowerCase();
+
+                // Filtrage par marque
+                if (currentBrandFilter !== 'all' && brand !== currentBrandFilter) {
+                    return false;
+                }
+
+                // Filtrage par recherche
+                if (searchTerm && !productName.includes(searchTerm)) {
+                    return false;
+                }
+
+                // Filtrage par prix
+                if (price < minPrice || price > maxPrice) {
+                    return false;
+                }
+
+                // Filtrage par stock
+                if (stockFilter !== 'all') {
+                    switch (stockFilter) {
+                        case 'high':
+                            if (stock <= 50) return false;
+                            break;
+                        case 'medium':
+                            if (stock < 10 || stock > 50) return false;
+                            break;
+                        case 'low':
+                            if (stock >= 10 || stock === 0) return false;
+                            break;
+                        case 'out':
+                            if (stock !== 0) return false;
+                            break;
+                    }
+                }
+
+                return true;
+            }
+
+            gridProducts.forEach(product => {
+                product.style.display = shouldShowProduct(product) ? 'block' : 'none';
+            });
+
+            tableRows.forEach(row => {
+                row.style.display = shouldShowProduct(row) ? 'table-row' : 'none';
+            });
+        }
+
+        // Recherche de produits
+        function searchProducts() {
+            filterProducts();
+        }
+
+        // Trier les produits
+        function sortProducts() {
+            const sortValue = document.getElementById('sortSelect').value;
+            const gridContainer = document.getElementById('productsGrid');
+            const tableBody = document.querySelector('#productsTable tbody');
+            
+            const gridProducts = Array.from(gridContainer.querySelectorAll('.product-card'));
+            const tableRows = Array.from(tableBody.querySelectorAll('tr'));
+
+            function sortElements(elements, isGrid = true) {
+                return elements.sort((a, b) => {
+                    const getName = (el) => isGrid ? 
+                        el.querySelector('.product-title').textContent : 
+                        el.querySelector('.table-product-info h4').textContent;
+                    const getPrice = (el) => parseFloat(el.dataset.price);
+                    const getStock = (el) => parseInt(el.dataset.stock);
+
+                    switch (sortValue) {
+                        case 'name':
+                            return getName(a).localeCompare(getName(b));
+                        case 'name-desc':
+                            return getName(b).localeCompare(getName(a));
+                        case 'price':
+                            return getPrice(a) - getPrice(b);
+                        case 'price-desc':
+                            return getPrice(b) - getPrice(a);
+                        case 'stock':
+                            return getStock(a) - getStock(b);
+                        case 'stock-desc':
+                            return getStock(b) - getStock(a);
+                        default:
+                            return 0;
+                    }
+                });
+            }
+
+            // Réorganiser les éléments
+            sortElements(gridProducts, true).forEach(product => gridContainer.appendChild(product));
+            sortElements(tableRows, false).forEach(row => tableBody.appendChild(row));
+        }
+
+        // Filtrer par niveau de stock
+        function filterByStock() {
+            filterProducts();
+        }
+
+        // Changer la vue (grille/tableau)
+        function changeView(viewType) {
+            currentView = viewType;
+            
+            const gridView = document.getElementById('productsGrid');
+            const tableView = document.getElementById('productsTable');
+            const viewButtons = document.querySelectorAll('.view-btn');
+
+            viewButtons.forEach(btn => btn.classList.remove('active'));
+            
+            if (viewType === 'grid') {
+                gridView.classList.add('active');
+                tableView.classList.remove('active');
+                document.querySelector('.view-btn[onclick="changeView(\'grid\')"]').classList.add('active');
+            } else {
+                gridView.classList.remove('active');
+                tableView.classList.add('active');
+                document.querySelector('.view-btn[onclick="changeView(\'table\')"]').classList.add('active');
+            }
+        }
+
+        // Ouvrir le modal de produit
+        function openProductModal(productId = null) {
+            const modal = document.getElementById('productModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const submitBtn = document.getElementById('submitBtnText');
+            
+            if (productId) {
+                modalTitle.textContent = 'Modifier le produit';
+                submitBtn.textContent = 'Mettre à jour';
+                editingProductId = productId;
+                // Charger les données du produit
+                loadProductData(productId);
+            } else {
+                modalTitle.textContent = 'Nouveau Produit';
+                submitBtn.textContent = 'Ajouter le produit';
+                editingProductId = null;
+                document.getElementById('productForm').reset();
+            }
+            
+            modal.classList.add('show');
+        }
+
+        // Fermer le modal de produit
+        function closeProductModal() {
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('show');
+            editingProductId = null;
+            document.getElementById('productForm').reset();
+        }
+
+        // Charger les données d'un produit pour modification
+        function loadProductData(productId) {
+            const product = products.find(p => p.id == productId);
+            if (product) {
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productBrand').value = product.brand;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productStock').value = product.stock;
+                
+                // Cocher les tailles
+                product.sizes.forEach(size => {
+                    const checkbox = document.getElementById('size' + size);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+        }
+
+        // Gérer la soumission du formulaire de produit
+        function handleProductSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const selectedSizes = Array.from(document.querySelectorAll('.size-checkbox:checked')).map(cb => cb.value);
+            
+            const productData = {
+                name: formData.get('productName'),
+                brand: formData.get('productBrand'),
+                price: parseFloat(formData.get('productPrice')),
+                stock: parseInt(formData.get('productStock')),
+                description: formData.get('productDescription'),
+                sizes: selectedSizes
+            };
+
+            if (editingProductId) {
+                updateProduct(editingProductId, productData);
+            } else {
+                addProduct(productData);
+            }
+        }
+
+        // Ajouter un produit
+        function addProduct(productData) {
+            const newId = Math.max(...products.map(p => p.id)) + 1;
+            const newProduct = { id: newId, ...productData };
+            products.push(newProduct);
+            
+            showNotification('Produit ajouté avec succès !', 'success');
+            closeProductModal();
+            loadProducts(); // Recharger l'affichage
+        }
+
+        // Mettre à jour un produit
+        function updateProduct(productId, productData) {
+            const productIndex = products.findIndex(p => p.id == productId);
+            if (productIndex !== -1) {
+                products[productIndex] = { id: productId, ...productData };
+                showNotification('Produit mis à jour avec succès !', 'success');
+                closeProductModal();
+                loadProducts(); // Recharger l'affichage
+            }
+        }
+
+        // Modifier un produit
+        function editProduct(productId) {
+            openProductModal(productId);
+        }
+
+        // Supprimer un produit
+        function deleteProduct(productId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+                const productIndex = products.findIndex(p => p.id == productId);
+                if (productIndex !== -1) {
+                    products.splice(productIndex, 1);
+                    showNotification('Produit supprimé avec succès !', 'success');
+                    loadProducts(); // Recharger l'affichage
+                }
+            }
+        }
+
+        // Importer des produits
+        function importProducts() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json,.csv,.xlsx';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    showNotification('Import en cours...', 'success');
+                    // Ici, vous ajouteriez la logique d'import réelle
+                    setTimeout(() => {
+                        showNotification('Produits importés avec succès !', 'success');
+                    }, 2000);
+                }
+            };
+            input.click();
+        }
+
+        // Exporter des produits
+        function exportProducts() {
+            const dataStr = JSON.stringify(products, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'produits_' + new Date().toISOString().split('T')[0] + '.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('Export terminé !', 'success');
+        }
+
+        // Retour au dashboard
+        function goBack() {
+            // Ici, vous redirigeriez vers le dashboard principal
+            showNotification('Retour au dashboard...', 'success');
+        }
+
+        // Afficher une notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Animation d'apparition des cartes au scroll
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.product-card, .stat-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        }
+
+        // Initialiser les animations
+        setTimeout(animateOnScroll, 100);
+
+        // Gestion du responsive
+        function handleResize() {
+            const sidebar = document.querySelector('.brand-filter-sidebar');
+            const mainContent = document.querySelector('.main-content');
+            
+            if (window.innerWidth <= 1400) {
+                sidebar.style.display = 'none';
+                mainContent.style.gridTemplateColumns = '1fr';
+            } else {
+                sidebar.style.display = 'block';
+                mainContent.style.gridTemplateColumns = '300px 1fr';
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Appel initial
+
+        // Shortcuts clavier
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + N pour nouveau produit
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openProductModal();
+            }
+            
+            // Escape pour fermer le modal
+            if (e.key === 'Escape') {
+                closeProductModal();
+            }
+            
+            // Ctrl/Cmd + F pour focus sur la recherche
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // Auto-sauvegarde (simulation)
+        setInterval(() => {
+            // Ici, vous pourriez sauvegarder automatiquement les modifications
+            console.log('Auto-sauvegarde des données...');
+        }, 30000); // Toutes les 30 secondes
+    </script>
+</body>
+</html>

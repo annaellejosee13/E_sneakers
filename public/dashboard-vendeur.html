@@ -6,613 +6,688 @@
     <title>Dashboard Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .sidebar-gradient {
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        }
-        .page-content {
-            display: none;
-        }
-        .page-content.active {
-            display: block;
-        }
-    </style>
+    
 </head>
 <style>
      
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
 
-        .dashboard-container {
-            display: flex;
-            min-height: 100vh;
-        }
+    .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+    }
 
-        /* Sidebar */
+    /* Sidebar */
+    .sidebar {
+        width: 280px;
+        background: rgba(255, 255, 255, 0.05);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        position: fixed;
+        height: 100vh;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-header {
+        padding: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+    }
+
+    .logo-container {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .logo-text {
+        font-size: 1.3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .nav-menu {
+        padding: 24px;
+        flex: 1;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(4px);
+    }
+
+    .nav-item.active {
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        color: white;
+        border-color: transparent;
+    }
+
+    .nav-icon {
+        font-size: 1.2rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .sidebar-footer {
+        padding: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logout-btn {
+        width: 100%;
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #48bb78, #4ecdc4);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Main Content */
+    .main-content {
+        margin-left: 280px;
+        flex: 1;
+        min-height: 100vh;
+    }
+
+    .header {
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        padding: 20px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .search-bar {
+        position: relative;
+        display: none;
+    }
+
+    .search-bar.visible {
+        display: block;
+    }
+
+    .search-input {
+        padding: 12px 16px 12px 44px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-size: 0.95rem;
+        width: 300px;
+        transition: all 0.3s ease;
+    }
+
+    .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #4ecdc4;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .notification-btn {
+        position: relative;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .notification-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        background: #f56565;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .user-avatar:hover {
+        transform: scale(1.05);
+    }
+
+    /* Content Area */
+    .content-area {
+        padding: 32px;
+    }
+
+    .page-section {
+        display: none;
+    }
+
+    .page-section.active {
+        display: block;
+        animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Cards */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .metric-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        transition: all 0.3s ease;
+    }
+
+    .metric-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .metric-title {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .metric-change {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+    }
+
+    .change-positive {
+        color: #48bb78;
+    }
+
+    .change-negative {
+        color: #f56565;
+    }
+
+    .change-neutral {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Charts */
+    .charts-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .chart-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .chart-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+    }
+
+    /* Tables */
+    .table-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .table-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .export-btn {
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th {
+        padding: 16px 24px;
+        text-align: left;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .data-table td {
+        padding: 16px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .data-table tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+        padding: 12px 24px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Form Elements */
+    .form-input {
+        padding: 12px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #4ecdc4;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-success {
+        background: rgba(72, 187, 120, 0.2);
+        color: #48bb78;
+    }
+
+    .status-warning {
+        background: rgba(237, 137, 54, 0.2);
+        color: #ed8936;
+    }
+
+    .status-danger {
+        background: rgba(245, 101, 101, 0.2);
+        color: #f56565;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
         .sidebar {
+            transform: translateX(-100%);
             width: 280px;
-            background: rgba(255, 255, 255, 0.05);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            position: fixed;
-            height: 100vh;
-            z-index: 1000;
-            transition: all 0.3s ease;
         }
 
-        .sidebar-header {
-            padding: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
+        .sidebar.open {
+            transform: translateX(0);
         }
 
-        .logo-container {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-menu {
-            padding: 24px;
-            flex: 1;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            margin-bottom: 8px;
-            border-radius: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(4px);
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            color: white;
-            border-color: transparent;
-        }
-
-        .nav-icon {
-            font-size: 1.2rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar-footer {
-            padding: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logout-btn {
-            width: 100%;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, #48bb78, #4ecdc4);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Main Content */
         .main-content {
-            margin-left: 280px;
-            flex: 1;
-            min-height: 100vh;
+            margin-left: 0;
         }
 
+        .charts-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
         .header {
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            padding: 20px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 999;
+            padding: 16px 20px;
         }
 
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .content-area {
+            padding: 20px;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-
-        .search-bar {
-            position: relative;
-            display: none;
-        }
-
-        .search-bar.visible {
-            display: block;
+        .metrics-grid {
+            grid-template-columns: 1fr;
         }
 
         .search-input {
-            padding: 12px 16px 12px 44px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 0.95rem;
-            width: 300px;
-            transition: all 0.3s ease;
+            width: 200px;
         }
+    }
 
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
+    /* Additional styles for specific content */
+    .settings-form {
+        max-width: 800px;
+    }
 
-        .search-input:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
-        }
+    .form-group {
+        margin-bottom: 24px;
+    }
 
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-        }
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+    }
 
-        .notification-btn {
-            position: relative;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-        .notification-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
+    .pagination-btn {
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 20px;
-            height: 20px;
-            background: #f56565;
-            border-radius: 50%;
-            font-size: 0.75rem;
+    .pagination-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .pagination-btn.active {
+        background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+        color: white;
+        border-color: transparent;
+    }
+    .transaction-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        /* Content Area */
-        .content-area {
-            padding: 32px;
-        }
-
-        .page-section {
-            display: none;
-        }
-
-        .page-section.active {
-            display: block;
-            animation: fadeInUp 0.4s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Cards */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .metric-card {
-            background: rgba(255, 255, 255, 0.05);
+        .transaction-item {
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 16px;
             padding: 24px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .metric-card:hover {
+        .transaction-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #ff6b6b, #4ecdc4);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .transaction-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .transaction-item:hover {
             background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
+            transform: translateX(8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .metric-title {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .transaction-content {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            align-items: center;
+            gap: 20px;
         }
 
-        .metric-value {
-            font-size: 2rem;
+        .sneaker-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .transaction-details h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .transaction-meta {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .transaction-amount {
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 12px;
             background: linear-gradient(135deg, #4ecdc4, #45b7d1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .metric-change {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-        }
-
-        .change-positive {
-            color: #48bb78;
-        }
-
-        .change-negative {
-            color: #f56565;
-        }
-
-        .change-neutral {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Charts */
-        .charts-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .chart-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .chart-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
-        /* Tables */
-        .table-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            overflow: hidden;
-        }
-
-        .table-header {
-            padding: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .export-btn {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .export-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th {
-            padding: 16px 24px;
-            text-align: left;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table td {
-            padding: 16px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .data-table tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* Action Buttons */
-        .action-btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Form Elements */
-        .form-input {
-            padding: 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
-        }
-
-        /* Status Badges */
-        .status-badge {
-            padding: 4px 12px;
+        .transaction-status {
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .status-success {
-            background: rgba(72, 187, 120, 0.2);
-            color: #48bb78;
-        }
-
-        .status-warning {
-            background: rgba(237, 137, 54, 0.2);
-            color: #ed8936;
-        }
-
-        .status-danger {
-            background: rgba(245, 101, 101, 0.2);
-            color: #f56565;
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .sidebar {
-                transform: translateX(-100%);
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .charts-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-
-            .content-area {
-                padding: 20px;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .search-input {
-                width: 200px;
-            }
-        }
-
-        /* Additional styles for specific content */
-        .settings-form {
-            max-width: 800px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .pagination-btn {
-            padding: 8px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .pagination-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .pagination-btn.active {
-            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
-            color: white;
-            border-color: transparent;
-        }
 </style>
-
 <body class="bg-gray-50 font-sans">
     <div class="flex h-screen">
         <!-- Sidebar -->
@@ -629,7 +704,7 @@
             <nav class="flex-1 p-4">
                 <ul class="space-y-2">
                     <li>
-                        <a href="#" onclick="showPage('dashboard')" class="nav-link flex items-center p-3  text-white bg-blue-600 p-3 rounded-lg" data-page="dashboard">
+                        <a href="./dashboard-vendeur.html"  class="nav-link flex items-center p-3  text-white bg-blue-600 p-3 rounded-lg" data-page="dashboard">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                             </svg>
@@ -637,15 +712,22 @@
                         </a>
                     </li>
                     <li>
-                        <a href="./dashboard-vendeur.html"  class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white" data-page="vendeurs">
+                        <a href="./vente--vendeur.html" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white" data-page="ventes">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
                             </svg>
-                            Vendeurs
+                            Ventes
                         </a>
                     </li>
                     <li>
-                        <a href="./produits-admin.html"  class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white " data-page="produits">
+                        <a href="./transaction-vendeur.html" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors  ">
+                            <i class="fas fa-exchange-alt w-5"></i>
+                            <span>Transactions</span>
+                            <span class="ml-auto bg-blue-600 text-xs px-2 py-1 rounded-full">#</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./produits-vendeurs.html"  class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white " data-page="produits">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                             </svg>
@@ -653,7 +735,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="./parametre-admin.html"  class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white" data-page="parametres">
+                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-warehouse w-5"></i>
+                            <span>Stock</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./parametre-vendeur.html"  class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white" data-page="parametres">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
                             </svg>
@@ -666,7 +754,7 @@
             <!-- Logout Button -->
             <div class="p-4">
                 <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-                      onclick="window.location.href='deconnection-admin.html'">
+                      onclick="window.location.href='deconnection-vendeur'">
                     Deconnexion
               </button>
             </div>
@@ -678,7 +766,7 @@
             <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
-                        <h1 id="page-title" class="text-2xl font-bold text-gray-900">DASHBOARD ADMIN</h1>
+                        <h1 id="page-title" class="text-2xl font-bold text-gray-900">DASHBOARD Vendeur</h1>
                     </div>
                     <div class="flex items-center space-x-4">
                         <div id="search-bar" class="hidden">
@@ -712,31 +800,31 @@
                     <!-- Metrics Cards -->
                     <div class="metrics-grid">
                         <div class="metric-card">
-                            <div class="metric-title">Vendeurs Actifs</div>
-                            <div class="metric-value">156</div>
+                            <div class="metric-title">Produits en ligne</div>
+                            <div class="metric-value">24</div>
                             <div class="metric-change change-positive">
-                                ↗ +12% ce mois
+                                ↗ +3 ce mois
                             </div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-title">Taux de réclamations</div>
-                            <div class="metric-value">2.4%</div>
-                            <div class="metric-change change-negative">
-                                ↗ +0.3% ce mois
+                            <div class="metric-title">Revenus ce mois</div>
+                            <div class="metric-value">3,247€</div>
+                            <div class="metric-change change-positive">
+                                ↗ +18.5%
                             </div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-title">Délai moyen d'expédition</div>
-                            <div class="metric-value">2.1j</div>
+                            <div class="metric-title">Ventes totales</div>
+                            <div class="metric-value">42</div>
                             <div class="metric-change change-positive">
-                                ↓ -0.2j ce mois
+                                ↗ +12 ce mois
                             </div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-title">Taux de rupture de stock</div>
-                            <div class="metric-value">5.8%</div>
+                            <div class="metric-title">Note moyenne</div>
+                            <div class="metric-value">4.8</div>
                             <div class="metric-change change-positive">
-                                ↓ -1.2% ce mois
+                                ↗ +0.2 points
                             </div>
                         </div>
                     </div>
@@ -765,44 +853,49 @@
                             </div>
                         </div>
                     </div>
-                        
 
-                    <div class="table-card">
+                    
+
+                     <div class="table-card">
                         <div class="table-header">
-                            <h3 class="table-title">Produits les plus vendus</h3>
+                            <h3 class="table-title">Commandes récentes</h3>
                             <button class="export-btn">Export</button>
                         </div>
                         <table class="data-table">
                             <thead>
                                 <tr>
+                                    <th>Commande</th>
                                     <th>Produit</th>
-                                    <th>Date</th>
-                                    <th>Prix</th>
-                                    <th>Quantité</th>
+                                    <th>Client</th>
                                     <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>#ORD-001</td>
                                     <td>Nike Air Jordan 1</td>
-                                    <td>15 Nov 2024</td>
+                                    <td>Julie Martin</td>
                                     <td>189€</td>
-                                    <td>24</td>
-                                    <td>4,536€</td>
+                                    <td><span class="status-badge status-success">Expédiée</span></td>
+                                    <td>15 Nov 2024</td>
                                 </tr>
                                 <tr>
+                                    <td>#ORD-002</td>
                                     <td>Adidas Yeezy 350</td>
-                                    <td>14 Nov 2024</td>
+                                    <td>Pierre Dubois</td>
                                     <td>220€</td>
-                                    <td>18</td>
-                                    <td>3,960€</td>
+                                    <td><span class="status-badge status-pending">En préparation</span></td>
+                                    <td>14 Nov 2024</td>
                                 </tr>
                                 <tr>
+                                    <td>#ORD-003</td>
                                     <td>Nike Air Max 90</td>
-                                    <td>13 Nov 2024</td>
+                                    <td>Sarah Chen</td>
                                     <td>120€</td>
-                                    <td>32</td>
-                                    <td>3,840€</td>
+                                    <td><span class="status-badge status-warning">En attente</span></td>
+                                    <td>13 Nov 2024</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1156,10 +1249,10 @@
             new Chart(salesCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
                     datasets: [{
                         label: 'Current Week',
-                        data: [300, 450, 320, 500, 600, 750, 900],
+                        data: [1200, 1800, 1500, 2200, 2800, 3200, 3600, 4100, 3800, 4200, 4800, 5200],
                         borderColor: '#ef4444',
                         backgroundColor: 'rgba(239, 68, 68, 0.1)',
                         tension: 0.4,
@@ -1179,6 +1272,13 @@
                             beginAtZero: true,
                             grid: {
                                 color: '#f3f4f6'
+                            },
+
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                callback: function(value) {
+                                    return value + '€';
+                                }
                             }
                         },
                         x: {
