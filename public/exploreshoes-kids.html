@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Favoris</title>
+    <title>Explorer Sneakers Hommes</title>
     <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -12,28 +11,28 @@
             background: #fff;
             font-family: 'Josefin Sans', 'Roboto', sans-serif;
         }
-        .favoris-container {
-            max-width: 700px;
+        .explore-container {
+            max-width: 900px;
             margin: 60px auto;
             background: #f8f9fa;
             border-radius: 16px;
             box-shadow: 0 2px 16px rgba(0,0,0,0.08);
             padding: 40px 32px;
         }
-        .favoris-title {
+        .explore-title {
             font-size: 2rem;
             font-weight: 700;
             color: #1a1a2e;
             margin-bottom: 24px;
             text-align: center;
         }
-        .favoris-list {
+        .explore-list {
             display: flex;
             flex-direction: column;
             gap: 24px;
             margin-bottom: 32px;
         }
-        .favori-item {
+        .explore-item {
             display: flex;
             align-items: center;
             background: #fff;
@@ -42,32 +41,32 @@
             padding: 18px 24px;
             gap: 24px;
         }
-        .favori-img {
+        .explore-img {
             width: 90px;
             height: 90px;
             object-fit: cover;
             border-radius: 10px;
             box-shadow: 0 1px 6px rgba(0,0,0,0.08);
         }
-        .favori-details {
+        .explore-details {
             flex: 1;
         }
-        .favori-details h2 {
+        .explore-details h2 {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 8px;
             color: #1a1a2e;
         }
-        .favori-details p {
+        .explore-details p {
             margin: 0 0 4px 0;
             color: #444;
         }
-        .favori-actions {
+        .explore-actions {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        .btn-favori {
+        .btn-explore {
             background: #ff6b6b;
             color: #fff;
             border: none;
@@ -80,11 +79,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
         }
-        .btn-favori:hover {
+        .btn-explore:hover {
             background: #ee5a6f;
         }
-        .no-favoris {
+        .no-explore {
             text-align: center;
             color: #888;
             font-size: 1.1rem;
@@ -93,27 +93,39 @@
     </style>
 </head>
 <body>
-    <div class="favoris-container">
-        <div class="favoris-title"><i class="fa-solid fa-heart"></i> Mes Favoris</div>
-        <div class="favoris-list">
-            <!-- Exemple d'article favori -->
-            <div class="favori-item">
-                <img src="./assets/images/product-1.jpg" alt="Sneaker 1" class="favori-img">
-                <div class="favori-details">
-                    <h2>Nike Air Max 2025</h2>
-                    <p>Couleur : Blanc/Rouge</p>
-                    <p>Prix : 120€</p>
+    <div class="explore-container">
+        <div class="explore-title"><i class="fa-solid fa-shoe-prints"></i> Explorer Sneakers Hommes</div>
+        <div class="explore-list">
+            <!-- Exemple de sneaker -->
+            <div class="explore-item">
+                <img src="./assets/images/product-2.jpg" alt="Sneaker Homme 1" class="explore-img">
+                <div class="explore-details">
+                    <h2>Adidas UltraBoost 2025</h2>
+                    <p>Couleur : Noir/Gris</p>
+                    <p>Prix : 140€</p>
                 </div>
-                <div class="favori-actions">
-                    <button class="btn-favori"><i class="fa-solid fa-trash"></i> Retirer</button>
-                    <a href="paiement-clent.html" class="btn-favori" style="text-decoration:none;"><i class="fa-solid fa-cart-shopping"></i> Acheter</a>
-                    <a href="index.html" class="btn-favori"><i class="fa-solid fa-house"></i> Accueil</a>
-                    
+                <div class="explore-actions">
+                    <a href="#" class="btn-explore"><i class="fa-solid fa-eye"></i> Voir détails</a>
+                    <a href="panier.html" class="btn-explore"><i class="fa-solid fa-cart-plus"></i> Aller au panier</a>
+                    <a href="favoris.html" class="btn-explore"><i class="fa-solid fa-heart"></i> Aller aux favoris</a>
                 </div>
             </div>
-            <!-- Répéter pour chaque favori -->
+             <div class="explore-item">
+                <img src="./assets/images/product-2.jpg" alt="Sneaker Homme 1" class="explore-img">
+                <div class="explore-details">
+                    <h2>Adidas UltraBoost 2025</h2>
+                    <p>Couleur : Noir/Gris</p>
+                    <p>Prix : 140€</p>
+                </div>
+                <div class="explore-actions">
+                    <a href="#" class="btn-explore"><i class="fa-solid fa-eye"></i> Voir détails</a>
+                     <a href="panier.html" class="btn-explore"><i class="fa-solid fa-cart-plus"></i> Aller au panier</a>
+                    <a href="favoris.html" class="btn-explore"><i class="fa-solid fa-heart"></i> Aller aux favoris</a>
+                </div>
+            </div>
+            <!-- Répéter pour chaque sneaker -->
         </div>
-        <div class="no-favoris" style="display:none;">Vous n'avez aucun favori pour le moment.</div>
+        <div class="no-explore" style="display:none;">Aucune sneaker à explorer pour le moment.</div>
     </div>
 </body>
 </html>
