@@ -62,7 +62,7 @@
                <li><router-link to="/login" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Connexion</router-link></li>
                 <li><router-link to="/compte" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Mon compte</router-link></li>
                 <li><router-link to="/commandes" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Mes commandes</router-link></li>
-                <li><button class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e; background: none; border: none; width: 100%; text-align: left;" @click="handleLogout">Déconnexion</button></li>
+                <li><router-link to="/logout" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Déconnexion</router-link></li>
               </ul>
             </div>
           </li>
