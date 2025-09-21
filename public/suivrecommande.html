@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de Commande</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #fff;
+            font-family: 'Josefin Sans', 'Roboto', sans-serif;
+        }
+        .suivi-container {
+            max-width: 700px;
+            margin: 60px auto;
+            background: #f8f9fa;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            padding: 40px 32px;
+        }
+        .suivi-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .suivi-details {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .suivi-details h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+        .suivi-details p {
+            margin: 0 0 8px 0;
+            color: #444;
+        }
+        .suivi-etapes {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .etape {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .etape-icon {
+            font-size: 1.5rem;
+            color: #ff6b6b;
+        }
+        .etape-label {
+            font-size: 1.05rem;
+            color: #1a1a2e;
+            font-weight: 500;
+        }
+        .etape.active .etape-icon {
+            color: #1a1a2e;
+        }
+        .suivi-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn-suivi {
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .btn-suivi:hover {
+            background: #ee5a6f;
+        }
+    </style>
+</head>
+<body>
+    <div class="suivi-container">
+        <div class="suivi-title"><i class="fa-solid fa-truck"></i> Suivi de Commande</div>
+        <div class="suivi-details">
+            <h2>Commande #123456</h2>
+            <p>Date : 15/09/2025</p>
+            <p>Produit : Nike Air Max 2025</p>
+            <p>Quantité : 2</p>
+            <p>Prix total : 240€</p>
+            <p>Adresse de livraison : 12 rue de Paris, 75001 Paris</p>
+        </div>
+        <div class="suivi-etapes">
+            <div class="etape active">
+                <span class="etape-icon"><i class="fa-solid fa-check-circle"></i></span>
+                <span class="etape-label">Commande validée</span>
+            </div>
+            <div class="etape active">
+                <span class="etape-icon"><i class="fa-solid fa-box"></i></span>
+                <span class="etape-label">Préparation en cours</span>
+            </div>
+            <div class="etape active">
+                <span class="etape-icon"><i class="fa-solid fa-truck"></i></span>
+                <span class="etape-label">En cours de livraison</span>
+            </div>
+            <div class="etape">
+                <span class="etape-icon"><i class="fa-solid fa-location-dot"></i></span>
+                <span class="etape-label">Livrée</span>
+            </div>
+        </div>
+        <div class="suivi-actions">
+            <a href="mes-commandes.html" class="btn-suivi"><i class="fa-solid fa-arrow-left"></i> Retour à mes commandes</a>
+            <a href="index.html" class="btn-suivi"><i class="fa-solid fa-house"></i> Accueil</a>
+        </div>
+    </div>
+</body>
+</html>
