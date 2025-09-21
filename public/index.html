@@ -156,11 +156,11 @@
             Avec Skeankers – Marchez avec style, chaque pas devient une déclaration de mode
           </p>
 
-          <button class="btn btn-primary">
+          <!-- <button class="btn btn-primary">
             <span>Achetez maintenant</span>
 
             <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-          </button>
+          </button> -->
 
         </div>
       </section>
@@ -268,7 +268,7 @@
 
           <ul class="product-list">
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Nike">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -323,7 +323,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Adidas">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -372,7 +372,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Puma">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -425,7 +425,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Nike">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -477,7 +477,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Nike">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -528,7 +528,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Adidas">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -577,7 +577,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Nike">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -626,7 +626,7 @@
               </div>
             </li>
 
-            <li class="product-item">
+            <li class="product-item" data-brand="Bata">
               <div class="product-card" tabindex="0">
 
                 <figure class="card-banner">
@@ -1259,6 +1259,54 @@
  <!-- CUSTOM JS Link -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <script src="./assets/js/app.js"></script>
+
+  <!-- Product Filter Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const productItems = document.querySelectorAll('.product-item');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const filterValue = this.textContent.trim();
+          
+          // Retirer la classe active de tous les boutons
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Ajouter la classe active au bouton cliqué
+          this.classList.add('active');
+          
+          // Animation de filtrage avec transition fluide
+          productItems.forEach((item, index) => {
+            const itemBrand = item.getAttribute('data-brand');
+            const shouldShow = filterValue === 'Tout' || itemBrand === filterValue;
+            
+            if (shouldShow) {
+              item.style.opacity = '0';
+              item.style.transform = 'translateY(20px)';
+              item.style.display = 'block';
+              
+              // Animation d'apparition avec délai progressif
+              setTimeout(() => {
+                item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+              }, index * 50);
+            } else {
+              // Animation de disparition
+              item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+              item.style.opacity = '0';
+              item.style.transform = 'translateY(-20px)';
+              
+              setTimeout(() => {
+                item.style.display = 'none';
+              }, 300);
+            }
+          });
+        });
+      });
+    });
+  </script>
 
   <!-- IONICON Link -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
