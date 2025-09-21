@@ -59,9 +59,10 @@
                 <span class="nav-action-text">Se connecter / S'inscrire</span>
               </button>
               <ul v-show="showUserMenu" class="dropdown-menu" style="background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-top: 8px; padding: 8px 0; min-width: 180px; position: absolute; z-index: 1000;">
+               <li><router-link to="/login" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Connexion</router-link></li>
                 <li><router-link to="/compte" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Mon compte</router-link></li>
                 <li><router-link to="/commandes" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Mes commandes</router-link></li>
-                <li><a href="#" class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e;">Déconnexion</a></li>
+                <li><button class="dropdown-link" style="padding: 8px 16px; display: block; color: #1a1a2e; background: none; border: none; width: 100%; text-align: left;" @click="handleLogout">Déconnexion</button></li>
               </ul>
             </div>
           </li>
@@ -96,6 +97,13 @@ const appStore = useAppStore()
 const productStore = useProductStore()
 const showUserMenu = ref(false)
 const showCategoryMenu = ref(false)
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+function handleLogout() {
+  // Ajoute ici la suppression des données de session si besoin
+  router.push({ path: '/logout' })
+}
 
 const handleScroll = () => {
   appStore.setScrolled(window.scrollY >= 80)

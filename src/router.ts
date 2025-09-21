@@ -22,6 +22,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/product/:id', name: 'ProductDetail', component: () => import('./views/ProductDetail.vue') },
   { path: '/checkout', name: 'Checkout', component: () => import('./views/Checkout.vue') },
   { path: '/login', name: 'Login', component: Login },
+  { path: '/logout', name: 'Logout', component: () => import('./views/Logout.vue') },
   { path: '/admin', name: 'Admin', component: Admin },
   { path: '/dashboardadmin', name: 'DashboardAdmin', component: DashboardAdmin },
   // Keep catch-all LAST
