@@ -33,10 +33,10 @@ const product = computed(() => {
         <i class="fa-solid fa-shoe-prints"></i> Détails du Sneaker
       </div>
       <div class="details-main">
-        <img :src="selectedImage" :alt="product.name" class="details-img" />
+        <img :src="product.image" :alt="product.name" class="details-img" />
         <div class="details-info">
           <h2>{{ product.name }}</h2>
-          <p>Prix : {{ product.price }}€</p>
+          <p>Prix : {{ product.price.toFixed(2) }} €</p>
           <p>Marque : {{ product.brand }}</p>
           
           <!-- Sélection des tailles -->
@@ -90,7 +90,7 @@ const product = computed(() => {
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
 
@@ -105,23 +105,32 @@ const product = computed(() => {
 // États réactifs pour les sélections
 const selectedSize = ref('39')
 const selectedColor = ref('blanc')
-const selectedImage = ref('./assets/images/product-1.jpg')
+
+// 👉 On utilise l’image du produit comme image par défaut
+const selectedImage = ref<string>('')
+
+// Quand le produit change, on met à jour l’image par défaut
+watch(product, (newProduct) => {
+  if (newProduct && newProduct.image) {
+    selectedImage.value = newProduct.image
+  }
+})
+
 const quantity = ref(1)
 
 // Données des tailles disponibles
 const availableSizes = ['39', '40', '41', '42', '43']
 
-// Données des couleurs disponibles
+// Données des couleurs disponibles (tu peux les relier à ton produit plus tard si tu veux)
 const availableColors = [
-  { name: 'blanc', value: '#fff', image: './assets/images/product-1.jpg' },
-  { name: 'rouge', value: '#ff6b6b', image: './assets/images/product-2.jpg' },
-  { name: 'noir', value: '#1a1a2e', image: './assets/images/product-3.jpg' }
+  { name: 'blanc', value: '#fff' },
+  { name: 'rouge', value: '#ff6b6b' },
+  { name: 'noir', value: '#1a1a2e' }
 ]
 
 // Méthodes
-const selectColor = (color: { name: string; value: string; image: string }) => {
+const selectColor = (color: { name: string; value: string }) => {
   selectedColor.value = color.name
-  selectedImage.value = color.image
 }
 
 const increaseQuantity = () => {
@@ -133,17 +142,8 @@ const decreaseQuantity = () => {
     quantity.value--
   }
 }
-
-const addToCart = () => {
-  // Logique d'ajout au panier
-  console.log('Ajout au panier:', {
-    product: product.value,
-    size: selectedSize.value,
-    color: selectedColor.value,
-    quantity: quantity.value
-  })
-}
 </script>
+
 
 <style>
 body {

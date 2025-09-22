@@ -19,30 +19,30 @@
           <li>
             <div id="homme" class="collection-card" style="background-image: url('/collection-1.jpg')">
               <h3 class="h4 card-title">Collections Hommes</h3>
-              <router-link to="/hommes" class="btn btn-secondary">
+              <button class="btn btn-secondary" @click="productStore.setSelectedCategory('Homme')">
                 <span>Explorez tout</span>
                 <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-              </router-link>
+              </button>
             </div>
           </li>
 
           <li>
             <div id="femme" class="collection-card" style="background-image: url('/collection-2.jpg')">
               <h3 class="h4 card-title">Collections Femmes</h3>
-              <router-link to="/femmes" class="btn btn-secondary">
+              <button class="btn btn-secondary" @click="productStore.setSelectedCategory('Femme')">
                 <span>Explorez tout</span>
                 <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-              </router-link>
+              </button>
             </div>
           </li>
 
           <li>
             <div id="enfant" class="collection-card" style="background-image: url('/collection-3.jpg')">
               <h3 class="h4 card-title">Collections Enfants</h3>
-              <router-link to="/enfants" class="btn btn-secondary">
+              <button class="btn btn-secondary" @click="productStore.setSelectedCategory('Enfant')">
                 <span>Explorez tout</span>
                 <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-              </router-link>
+              </button>
             </div>
           </li>
 
@@ -68,7 +68,7 @@
         
         <TransitionGroup name="product-list" tag="ul" class="product-list">
           <ProductCard 
-            v-for="product in productStore.filteredProducts" 
+            v-for="product in productStore.filteredProductsByCategory" 
             :key="product.id" 
             :product="product"
           />
@@ -145,8 +145,16 @@
 import { useProductStore } from '@/stores/productStore'
 import FilterButtons from '@/components/FilterButtons.vue'
 import ProductCard from '@/components/ProductCard.vue'
+import { onMounted } from 'vue'
+
 
 const productStore = useProductStore()
+
+onMounted(() => {
+  productStore.loadProducts()
+  console.log("Produits chargés :", productStore.products)
+})
+
 </script>
 
 <style scoped>
